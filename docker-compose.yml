@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+  webhook-nats:
+    image: lkzcover/webhook-nats
+    environment:
+      HTTP_SERVER_CERT: "./cert/server.crt"
+      HTTP_SERVER_KEY: "./cert/server.key"
+      HTTP_SERVER_PORT: 443
+      NATS_CONN:  "nats://nats:4222"
+      NAST_SUBJ: "tg_webhook"
+    ports:
+      - "443:443"
+    volumes:
+      - ./bin/cert:/cert
+    networks:
+      - "nats"
+  nats:
+    image: docker.io/nats:2.10.4
+    networks:
+      - "nats"
+networks:
+  nats:
+    name: nats
